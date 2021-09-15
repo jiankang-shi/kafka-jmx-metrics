@@ -24,7 +24,7 @@ public class KafkaClient<S> {
     //    static long tempkey;
     static List<String> list = new ArrayList<>();
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         //第一级目录
 //        try {
 //            JMXServiceURL jmxServiceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://l-hdpstest14.data.cn0:9988/jmxrmi");
@@ -40,9 +40,9 @@ public class KafkaClient<S> {
 //            }
         //while (true) {
             connection(args);
-          //  sys();
+            sys();
 
-           // Thread.sleep(60000);
+           Thread.sleep(60000);
         //}
     }
 

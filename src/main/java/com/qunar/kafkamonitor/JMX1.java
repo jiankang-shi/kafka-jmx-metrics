@@ -21,15 +21,21 @@ import sun.rmi.runtime.Log;
  * @author root
  */
 public class JMX1<S> {
-    static String title = "s.data.pf_kafka_logcollect.";
+    //static String title = "s.data.pf_kafka_logcollect.";
+    static String title = "s.data.pf_kafka_docker_log.";
     static long timeMillis = System.currentTimeMillis() / 1000;
     static HashMap<String, Long> mapcl = new HashMap<>();
     static HashMap<String, Long> mapAll = new HashMap<>();
     static List<String> list = new ArrayList<>();
 
 
-    static final String[] oriMetricKey = {"kafka.log:type=Log,name=LogEndOffset", "kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions", "kafka.server:type=ReplicaManager,name=LeaderCount", "kafka.server:type=ReplicaManager,name=PartitionCount", "kafka.controller:type=KafkaController,name=OfflinePartitionsCount", "kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec", "kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSe", "kafka.server:type=ReplicaManager,name=IsrShrinksPerSec", "kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec"};
-    static final String[] oriMetricKey2 = {"kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec,topic=", "kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec,topic=", "kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec,topic="};
+    static final String[] oriMetricKey = {"kafka.log:type=Log,name=LogEndOffset", "kafka.cluster:type=Partition,name=UnderReplicated","kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions"
+            ,"kafka.server:type=ReplicaManager,name=LeaderCount", "kafka.server:type=ReplicaManager,name=PartitionCount", "kafka.controller:type=KafkaController,name=OfflinePartitionsCount"
+            ,"kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec", "kafka.server:type=ReplicaManager,name=IsrShrinksPerSec","kafka.server:type=ReplicaManager,name=IsrExpandsPerSec"
+            ,"kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent","kafka.network:type=Processor,name=IdlePercent","kafka.network:type=RequestChannel,name=RequestQueueSize","kafka.network:type=RequestChannel,name=ResponseQueueSize"
+            ,"kafka.server:type=KafkaServer,name=BrokerState","kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec",};
+    static final String[] oriMetricKey2 = {"kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec","kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec","kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec","kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec"
+            ,"kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec","kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec","kafka.network:type=RequestMetrics,name=TotalTimeMs,request=Produce","kafka.log:type=LogFlushStats,name=LogFlushRateAndTimeMs"};
     static final String[] oriMetricKey3 = {};
 
     public static void main(String[] args) {
@@ -63,15 +69,15 @@ public class JMX1<S> {
         for (Map.Entry entry : mapcl.entrySet()) {
             Object mapKey = entry.getKey();
             Long mapValue = (Long) entry.getValue();
-            String me = mapKey + " " + mapValue + " " +  timeMillis;
-            //System.out.println(me);
+            String me = mapKey+".value" + " " + mapValue + " " +  timeMillis;
+            System.out.println(me);
             url1.invoke(me);
 
 
         }
         for (String list1 : list) {
             String me = title+host.split(":")[0].replace(".","_")+"."+ list1 + " " +  timeMillis;
-            //System.out.println(me);
+            System.out.println(me);
             url1.invoke(me);
 
         }
@@ -104,13 +110,16 @@ public class JMX1<S> {
      **/
     public static void formatLogName(MBeanServerConnection mbsc, String Logname) throws MalformedObjectNameException {
         ObjectName mbeanName = new ObjectName(Logname);
-        if (Logname.equals("kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec") || Logname.equals("kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec") || Logname.equals("kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec") || Logname.equals("kafka.server:type=ReplicaManager,name=IsrShrinksPerSec")) {
+        if (Logname.equals("kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec")
+                || Logname.equals("kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec") || Logname.equals("kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec")
+                || Logname.equals("kafka.server:type=ReplicaManager,name=IsrShrinksPerSec")||Logname.equals("kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec")
+                ||Logname.equals("kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec")||Logname.equals("kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec")||Logname.equals("kafka.server:type=ReplicaManager,name=IsrExpandsPerSec")) {
             JmxReporter.MeterMBean meterMBean = JMX.newMBeanProxy(mbsc, mbeanName, JmxReporter.MeterMBean.class);
-            String items = Logname.replace(":", ".").replace("type=", "").replace("name=", ".").replace("topic=", ".").replace(",.", ".").replace(",", ".").replace("=", ".") + " " + meterMBean.getCount();
+            String items = Logname.replace(":", ".").replace("type=", "").replace("name=", ".").replace("topic=", ".").replace(",.", ".").replace(",", ".").replace("=", ".")+".value" + " " + meterMBean.getCount();
             list.add(items);
         } else {
             JmxReporter.GaugeMBean meterMBean = JMX.newMBeanProxy(mbsc, mbeanName, JmxReporter.GaugeMBean.class);
-            String items = Logname.replace(":", ".").replace("type=", "").replace("name=", ".").replace("topic=", ".").replace(",.", ".").replace(",", ".").replace("=", ".") + " " + meterMBean.getValue();
+            String items = Logname.replace(":", ".").replace("type=", "").replace("name=", ".").replace("topic=", ".").replace(",.", ".").replace(",", ".").replace("=", ".")+".value" + " " + meterMBean.getValue();
             list.add(items);
         }
 

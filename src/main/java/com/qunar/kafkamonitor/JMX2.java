@@ -97,7 +97,7 @@ public class JMX2<S> {
         Iterator MBeansetIterator = MBeanset.iterator();
         while (MBeansetIterator.hasNext()) {
             ObjectInstance objectInstance = (ObjectInstance) MBeansetIterator.next();
-            String tm = "kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec";
+            String tm = "kafka.network:type=RequestChannel,name=ResponseQueueSize";
                 if ( objectInstance.getObjectName().toString().startsWith(tm)){
                     System.out.println(objectInstance.getObjectName());
                 }
