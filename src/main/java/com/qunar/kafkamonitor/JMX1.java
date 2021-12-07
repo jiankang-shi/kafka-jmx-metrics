@@ -21,7 +21,6 @@ import sun.rmi.runtime.Log;
  * @author root
  */
 public class JMX1<S> {
-    //static String title = "s.data.pf_kafka_logcollect.";
     static String title = "s.data.pf_kafka_docker_log.";
     static long timeMillis = System.currentTimeMillis() / 1000;
     static HashMap<String, Long> mapcl = new HashMap<>();
@@ -29,12 +28,11 @@ public class JMX1<S> {
     static List<String> list = new ArrayList<>();
 
 
-    static final String[] oriMetricKey = {"kafka.log:type=Log,name=LogEndOffset", "kafka.cluster:type=Partition,name=UnderReplicated","kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions"
+    static final String[] oriMetricKey = {"kafka.log:type=Log,name=LogEndOffset","kafka.log:type=Log,name=Size", "kafka.cluster:type=Partition,name=UnderReplicated","kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions"
             ,"kafka.server:type=ReplicaManager,name=LeaderCount", "kafka.server:type=ReplicaManager,name=PartitionCount", "kafka.controller:type=KafkaController,name=OfflinePartitionsCount"
-            ,"kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec", "kafka.server:type=ReplicaManager,name=IsrShrinksPerSec","kafka.server:type=ReplicaManager,name=IsrExpandsPerSec"
-            ,"kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent","kafka.network:type=Processor,name=IdlePercent","kafka.network:type=RequestChannel,name=RequestQueueSize","kafka.network:type=RequestChannel,name=ResponseQueueSize"
+            ,"kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec","kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent","kafka.network:type=Processor,name=IdlePercent","kafka.network:type=RequestChannel,name=RequestQueueSize","kafka.network:type=RequestChannel,name=ResponseQueueSize"
             ,"kafka.server:type=KafkaServer,name=BrokerState","kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec",};
-    static final String[] oriMetricKey2 = {"kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec","kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec","kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec","kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec"
+    static final String[] oriMetricKey2 = {"kafka.server:type=ReplicaManager,name=IsrExpandsPerSec","kafka.server:type=ReplicaManager,name=IsrShrinksPerSec","kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec","kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec","kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec","kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec"
             ,"kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec","kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec","kafka.network:type=RequestMetrics,name=TotalTimeMs,request=Produce","kafka.log:type=LogFlushStats,name=LogFlushRateAndTimeMs"};
     static final String[] oriMetricKey3 = {};
 

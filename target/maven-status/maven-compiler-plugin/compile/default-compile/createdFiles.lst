@@ -1,1 +1,5 @@
+com\qunar\kafkamonitor\JMX2.class
+com\qunar\kafkamonitor\GraphiteUtil.class
+com\qunar\kafkamonitor\WatcherSink.class
+com\qunar\kafkamonitor\JMX1.class
 com\qunar\kafkamonitor\KafkaClient.class

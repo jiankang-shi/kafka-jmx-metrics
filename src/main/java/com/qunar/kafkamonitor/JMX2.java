@@ -32,14 +32,14 @@ public class JMX2<S> {
 
     public static void main(String[] args) {
         try {
-            String rmiAddress = "l-logcollectkafka1.data.cn2:9988";
+            String rmiAddress = "l-logcollectkafka1.ops.cna:9988";
             HashMap<String, Object> prop = new HashMap<String, Object>();
             JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + rmiAddress + "/jmxrmi");
             JMXConnector conn = JMXConnectorFactory.connect(url, prop);
             MBeanServerConnection mbsc = conn.getMBeanServerConnection();
 
 
-            //printAllTopicsBytesInPerSec(mbsc);
+            printAllTopicsBytesInPerSec(mbsc);
 //
            //printAllTopicsBytesOutPerSec(mbsc);
 
@@ -65,7 +65,7 @@ public class JMX2<S> {
 
     private static void printAllTopicsBytesInPerSec(MBeanServerConnection mbsc) throws MalformedObjectNameException
     {
-        String name = "\"kafka.server\":type=\"BrokerTopicMetrics\",name=\"AllTopicsBytesInPerSec\"";
+        String name = "kafka.server:type=ReplicaManager,name=IsrExpandsPerSec";
         ObjectName mbeanName = new ObjectName(name);
 
         JmxReporter.MeterMBean meterMBean = JMX.newMBeanProxy(mbsc, mbeanName, JmxReporter.MeterMBean.class);
@@ -98,7 +98,7 @@ public class JMX2<S> {
         Iterator MBeansetIterator = MBeanset.iterator();
         while (MBeansetIterator.hasNext()) {
             ObjectInstance objectInstance = (ObjectInstance) MBeansetIterator.next();
-            String tm = "kafka.network:type=RequestChannel,name=ResponseQueueSize";
+            String tm = "kafka.server:type=ReplicaManager,name=IsrExpandsPerSec";
                 if ( objectInstance.getObjectName().toString().startsWith(tm)){
                     System.out.println(objectInstance.getObjectName());
                 }
